@@ -1,0 +1,19 @@
+.Quiz {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    width: 100%;
+    padding-top: 50px;
+    background: linear-gradient(  #4a3d8b, #BFEFFF);
+    font-family: "Trebuchet MS";
+}
+
+.Quiz h1 {
+    color: azure;
+    margin-left: 10px;
+    font-size: 35px;
+}
+
+.QuizWrapper{
+    width: 500px;
+}

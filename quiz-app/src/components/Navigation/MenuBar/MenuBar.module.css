@@ -1,0 +1,19 @@
+.MenuBar{
+ position: fixed;
+    top: 30px;
+    left: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    color: azure;
+    z-index: 100;
+    transition: opacity, left  .4s ease-in;
+
+}
+
+.MenuBar:hover{
+    opacity: .6;
+}
+
+.MenuBar.open {
+    left: 320px;
+}

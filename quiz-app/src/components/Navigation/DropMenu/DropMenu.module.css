@@ -1,0 +1,44 @@
+.DropMenu {
+    left: 0;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 80%;
+    max-width: 320px;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    background: azure;
+    z-index: 90;
+    transform: translateX(0px);
+    transition: transform 0.4s ease-in;
+}
+.DropMenu.close {
+    transform: translateX(-320px);
+
+
+}
+.DropMenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+}
+.DropMenu ul li {
+    margin-bottom: 15px;
+
+}
+
+.DropMenu ul li a {
+color: #4d4880;
+    font-size: 30px;
+    text-decoration: none;
+    background: azure;
+    position: relative;
+    padding: 0 20px 10px 0;
+    transition: opacity .4s;
+}
+
+.DropMenu ul li a:hover, .active {
+ opacity: .7;
+
+}
