@@ -20,7 +20,8 @@
 
 .Button:disabled {
     cursor: not-allowed;
-    background: dimgrey;
+    background: #b13542;
+
 }
 
 

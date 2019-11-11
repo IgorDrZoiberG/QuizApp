@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './FinishedQuiz.module.css';
 import Button from "../UI/Button/Button";
+import {Link} from "react-router-dom";
 
 const FinishedQuiz  = props =>{
     const rightAnswers = Object.keys(props.results).reduce((accum, current)=>{
@@ -34,7 +35,10 @@ const FinishedQuiz  = props =>{
             <p>Правильно {rightAnswers} из {props.quiz.length} </p>
             <div>
                 <Button onClick = {props.repeat} disabled = {''} type ='primary'>Повторить </Button>
-                <Button  disabled = {''} type ='success'>Список тестов </Button>
+                <Link to = {'/'}>
+                    <Button  disabled = {''} type ='success'>Список тестов </Button>
+                </Link>
+
 
             </div>
         </div>

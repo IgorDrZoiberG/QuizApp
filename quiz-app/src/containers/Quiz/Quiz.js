@@ -2,117 +2,44 @@ import React from 'react';
 import styles from './Quiz.module.css';
 import ActualQuiz from "../../components/ActualQuiz/ActualQuiz";
 import FinishedQuiz from "../../components/FinishedQuiz/FinishedQuiz";
+import Loader from "../../components/UI/Loader/Loader";
+import {connect} from "react-redux";
+import {clickAnswerQuiz, loadQuiz, retryQuiz} from "../../store/actions/quiz";
+
+
 
 
 class Quiz extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            results: {},
-            currentQuestion: 0,
-            answerState: null,
-            isFinished: false,
-            quiz: [
-                {
-                    question: 'Какая пора года самая холодная?',
-                    correctAnswer: 3,
-                    id: 1,
-                    answers: [
-                        {text: 'лето', id: 1},
-                        {text: 'осень', id: 2},
-                        {text: 'зима', id: 3},
-                        {text: 'весна', id: 4}
-                    ]
-
-                },
-                {
-                    question: 'Какого цвета крокодил?',
-                    correctAnswer: 2,
-                    id: 2,
-                    answers: [
-                        {text: 'красный', id: 1},
-                        {text: 'зеленый', id: 2},
-                        {text: 'желтый', id: 3},
-                        {text: 'белый', id: 4}
-                    ],
-
-                }
-            ]
-
-        };
+    componentDidMount() {
+       this.props.loadQuiz(this.props.match.params.id)
     };
 
-    chooseCorrectAnswerHandler = answerId => {
-        if (this.state.answerState) {
-            const key = Object.keys(this.state.answerState)[0];
-            if (this.state.answerState[key] === 'success') {
-                return
-            }
-        }
-        const question = this.state.quiz[this.state.currentQuestion];
-        const results = this.state.results;
-
-
-        if (question.correctAnswer === answerId) {
-            if (!results[question.id]) {
-                results[question.id] = 'success'
-            }
-            this.setState({
-                answerState: {[answerId]: 'success'},
-                results
-            });
-            const timeout = setTimeout(() => {
-                if (this.isQuestionsFinished()) {
-                    this.setState({isFinished: true})
-                } else {
-                    this.setState({
-                        currentQuestion: this.state.currentQuestion + 1,
-                        answerState: null
-                    });
-                }
-                clearTimeout(timeout);
-            }, 1000);
-        } else {
-            results[question.id] = 'error';
-            this.setState({
-                answerState: {[answerId]: 'error'},
-                results
-            });
-        }
-    };
-    isQuestionsFinished = () => {
-        return this.state.currentQuestion + 1 === this.state.quiz.length;
-    };
-    repeatHandle = () => {
-      this.setState({
-          currentQuestion: 0,
-          answerState : null,
-          isFinished: false,
-          results: {}
-      })
-    };
+  componentWillUnmount() {
+      this.props.retryQuiz();
+  }
 
     render() {
         return (
             <div className={styles.Quiz}>
                 <div className={styles.QuizWrapper}>
                     <h1>Выберите правильный вариант ответа</h1>
-                    {this.state.isFinished ?
-                        <FinishedQuiz
-                            results={this.state.results}
-                            quiz={this.state.quiz}
-                            repeat = {this.repeatHandle}
+                    {this.props.loading || !this.props.quiz
+                        ? <Loader/>
+                        : this.props.isFinished ?
+                            <FinishedQuiz
+                                results={this.props.results}
+                                quiz={this.props.quiz}
+                                repeat={this.props.retryQuiz}
 
-                        />
-                        : <ActualQuiz
-                            answers={this.state.quiz[this.state.currentQuestion].answers}
-                            question={this.state.quiz[this.state.currentQuestion].question}
-                            onAnswerClick={this.chooseCorrectAnswerHandler}
-                            questionsLength={this.state.quiz.length}
-                            answerNumber={this.state.currentQuestion + 1}
-                            answerState={this.state.answerState}
-                        />
-
+                            />
+                            : <ActualQuiz
+                                answers={this.props.quiz[this.props.activeQuestion].answers}
+                                question={this.props.quiz[this.props.activeQuestion].question}
+                                onAnswerClick={this.props.clickAnswerQuiz}
+                                questionsLength={this.props.quiz.length}
+                                answerNumber={this.props.activeQuestion + 1}
+                                answerState={this.props.answerState}
+                            />
                     }
 
                 </div>
@@ -121,5 +48,26 @@ class Quiz extends React.Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        results: state.quiz.results,
+        activeQuestion: state.quiz.activeQuestion,
+        answerState: state.quiz.answerState,
+        isFinished: state.quiz.isFinished,
+        quiz: state.quiz.quiz,
+        loading: state.quiz.loading
+    }
+};
 
-export default Quiz;
+const mapDispatchToProps = dispatch => {
+return {
+    loadQuiz: id => dispatch(loadQuiz(id)),
+    clickAnswerQuiz: answerId => dispatch(clickAnswerQuiz(answerId)),
+    retryQuiz: ()=> dispatch(retryQuiz())
+
+}
+};
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Quiz);

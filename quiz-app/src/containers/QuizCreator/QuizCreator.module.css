@@ -1,0 +1,29 @@
+.QuizCreator {
+    padding-top: 100px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-grow: 1;
+    background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+
+
+}
+
+.QuizCreator h1 {
+    text-align: center;
+    color: azure;
+
+}
+
+.QuizCreator > div {
+    width: 100%;
+    max-width: 600px;
+    padding: 0 20px;
+}
+
+.QuizCreator form {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #b17282;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+}
